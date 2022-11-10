@@ -1,0 +1,78 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Enemies : MonoBehaviour
+{
+    public Rigidbody rb;
+    public GameObject player;
+    public float speed = 0.1f; 
+    private int speedToFollow = 1;
+    private float speedFinal;
+    private bool follow = true;
+    private float distance = 11f;
+    Player playerScript;
+    Vector3 directionToPlayer;
+    
+    void Start()
+    {
+        playerScript = FindObjectOfType<Player>();
+    }
+
+    void Update()
+    {
+        CheckDistance();
+        speedFinal = speed * speedToFollow;
+
+        //distance = Vector3.Distance(player.transform.position, transform.position);
+
+        Vector3 directionToPlayer = (player.transform.position - this.transform.position).normalized; // Sacado de FollowAtPlayer()
+        Distance();
+    }
+
+    void FixedUpdate()
+    {
+        if (follow)
+        {
+            FollowAtPlayer();
+        }
+    }
+    
+    public void Distance()
+    {
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, directionToPlayer , out hit, 100))
+        {
+            if(hit.collider.gameObject == player)
+            {
+                distance = hit.distance;
+            }
+        }
+    }
+
+    public void CheckDistance()
+    {
+        if (distance <= (playerScript.health / 10))
+        {
+            speedToFollow = 1;
+        }
+        else
+        {
+            speedToFollow = 0;
+        }
+    }
+    
+    public void FollowAtPlayer()
+    {
+        //Vector3 directionToPlayer = (player.transform.position - this.transform.position).normalized;
+        rb.AddForce(directionToPlayer * speedFinal, ForceMode.Impulse);
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        if(col.gameObject == player)
+        {
+        follow = false;
+        }
+    }
+}
