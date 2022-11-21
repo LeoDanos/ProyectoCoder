@@ -6,31 +6,29 @@ public class Enemies : MonoBehaviour
 {
     public Rigidbody rb;
     public GameObject player;
-    public float speed = 0.1f; 
-    private int speedToFollow = 1;
-    private float speedFinal;
-    private bool follow = true;
-    private float distance;
-    Player playerScript;
+    protected float speed = 0.1f; 
+    protected int speedToFollow = 1;
+    protected float speedFinal;
+    //private bool follow = true;
+    public int follow = 0;
+    protected float distance;
+    protected Player playerScript;
     
-    void Start()
+    public void Start()
     {
         playerScript = FindObjectOfType<Player>();
     }
 
-    void Update()
+    public void Update()
     {
         CheckDistance();
         speedFinal = speed * speedToFollow;
         distance = Vector3.Distance(player.transform.position, transform.position);
     }
 
-    void FixedUpdate()
+    public void FixedUpdate()
     {
-        if (follow)
-        {
-            FollowAtPlayer();
-        }
+        Follow();
     }
     
     public void CheckDistance()
@@ -44,6 +42,14 @@ public class Enemies : MonoBehaviour
             speedToFollow = 0;
         }
     }
+
+    public virtual void Follow()
+    {
+        if (follow == 0)
+        {
+            FollowAtPlayer();
+        }
+    }
     
     public void FollowAtPlayer()
     {
@@ -51,11 +57,11 @@ public class Enemies : MonoBehaviour
         rb.AddForce(directionToPlayer * speedFinal, ForceMode.Impulse);
     }
 
-    void OnCollisionEnter(Collision col)
+    public void OnCollisionEnter(Collision col)
     {
         if(col.gameObject == player)
         {
-        follow = false;
+        follow += 1;
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -34,6 +35,13 @@ public class Player : MonoBehaviour
     public GameObject camera1;
     public GameObject camera2;
 
+    [Header ("PAUSA")]
+    private bool pauseEnable;
+    public GameObject pauseMenu;
+    public GameObject timer;
+
+    public AudioSource beep;
+
     void Start()
     {
        Debug.Log ("Presiona W/S para Avanzar o Retroceder, A/D para Rotar y C para cambiar de cámara");
@@ -43,6 +51,16 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        // MENU DE PAUSA
+        if(Input.GetKeyUp(KeyCode.Escape))
+        {
+            if(pauseEnable)
+            ResumeGame();
+            else
+            PauseGame();
+        }
+        
+        
         // CUENTA REGRESIVA
         if (countdown > 0 && health > 0)
         {
@@ -193,7 +211,7 @@ public class Player : MonoBehaviour
         }
     }
     
-    // :: SISTEMA DE DAÑO ::
+    // :: SISTEMA DE DAÑO :: // Test Lerp?
     void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.CompareTag("Wall"))
@@ -236,6 +254,54 @@ public class Player : MonoBehaviour
             camera1.SetActive(true);
             camera2.SetActive(false);
         }
+    }
+
+    // :: MENU DE PAUSA ::
+
+    void PauseGame()
+    {
+        pauseMenu.SetActive(true);
+        pauseEnable = true;
+        timer.SetActive(false);
+        Time.timeScale = 0;
+        beep.volume = 0;
+        beep.loop = false;
+    }
+
+    void ResumeGame()
+    {
+        pauseMenu.SetActive(false);
+        pauseEnable = false;
+        timer.SetActive(true);
+        Time.timeScale = 1;
+        beep.loop = true;
+        beep.Play();
+    }
+
+    public void Resume()
+    {
+        ResumeGame();
+    }
+
+    public void Restart()
+    {
+        beep.loop = true;
+        beep.volume = 0;
+        Time.timeScale = 1;
+        SceneManager.LoadScene(1);
+    }
+
+    public void ReturnToMainMenu()
+    {
+        beep.loop = true;
+        beep.volume = 0;
+        Time.timeScale = 1;
+        SceneManager.LoadScene(0);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 
     // TRASH //

@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: 5934fa772122a4047ba7e655eb23d170
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Ekibastuz
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 5172b3af168e8474e8738acf6ed22e76, type: 3}
+  - {fileID: 12800000, guid: 85ad2fdfeeadac5469ef3717b0ab2d07, type: 3}
+  - {fileID: 12800000, guid: 04d3abdd27c3afe4199edb5ba2410b36, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
