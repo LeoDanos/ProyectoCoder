@@ -1,6 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+<<<<<<< Updated upstream
+=======
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+>>>>>>> Stashed changes
 
 public class Player : MonoBehaviour
 {
@@ -9,7 +14,7 @@ public class Player : MonoBehaviour
     public float health = 100f;
 
     public int force = 20;
-    public int torque = 12;
+    public int torque = 60; //12
     public float chargeFactor = 15f;
     public float consumptionFactor = 30f;
     public int movingConsumptionMultiplier = 5;
@@ -18,12 +23,21 @@ public class Player : MonoBehaviour
     bool path = false;
 
     public GameObject healthLight;
+
+    public GameObject extraBateryEffect;
     
     public GameObject led1;
     public GameObject led2;
     public GameObject led3;
     public GameObject led4;
     public GameObject led5;
+    public GameObject ledOn;
+
+    public GameObject led1Hub;
+    public GameObject led2Hub;
+    public GameObject led3Hub;
+    public GameObject led4Hub;
+    public GameObject led5Hub;
 
     public Material eGray;
     public Material eGreen;
@@ -33,9 +47,28 @@ public class Player : MonoBehaviour
 
     public GameObject camera1;
     public GameObject camera2;
+    public GameObject bateryHub;
 
+<<<<<<< Updated upstream
+=======
+    [Header ("PAUSA")]
+    private bool pauseEnable;
+    public GameObject pauseMenu;
+    public GameObject gameOverMenu;
+    public GameObject gameOverTxt;
+    public GameObject winTxt;
+    public GameObject timer;
+
+    public AudioSource beep;
+
+    public AudioSource engine;
+    bool VEnable;
+    bool HEnable;
+
+>>>>>>> Stashed changes
     void Start()
     {
+       Time.timeScale = 1;
        Debug.Log ("Presiona W/S para Avanzar o Retroceder, A/D para Rotar y C para cambiar de cámara");
     }
 
@@ -43,6 +76,37 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+<<<<<<< Updated upstream
+=======
+        // MENU DE PAUSA
+        if((Input.GetKeyUp(KeyCode.Escape)) && !gameOverMenu.activeSelf)
+        {
+            if(pauseEnable)
+            ResumeGame();
+            else
+            PauseGame();
+        }
+
+        // GAME OVER
+        if (health <= 0 || countdown <= 0)
+        {
+            Time.timeScale = 0;
+            gameOverTxt.SetActive(true);
+            winTxt.SetActive(false);
+            gameOverMenu.SetActive(true);
+        }
+        
+        // EXTRA BATERIA
+        if (health > 100)
+        {
+            extraBateryEffect.SetActive(true);
+        }
+        else
+        {
+            extraBateryEffect.SetActive(false);
+        }
+        
+>>>>>>> Stashed changes
         // CUENTA REGRESIVA
         if (countdown > 0 && health > 0)
         {
@@ -81,6 +145,11 @@ public class Player : MonoBehaviour
             led2.GetComponent<MeshRenderer> ().material = eYellow;
             led3.GetComponent<MeshRenderer> ().material = eGreen;
             led4.GetComponent<MeshRenderer> ().material = eGreen;
+
+            led1Hub.GetComponent<Image>().color = Color.red;
+            led2Hub.GetComponent<Image>().color = Color.yellow;
+            led3Hub.GetComponent<Image>().color = Color.green;
+            led4Hub.GetComponent<Image>().color = Color.green;
         }
         if (health > 50 && health <= 75)
         {
@@ -88,6 +157,11 @@ public class Player : MonoBehaviour
             led2.GetComponent<MeshRenderer> ().material = eYellow;
             led3.GetComponent<MeshRenderer> ().material = eGreen;
             led4.GetComponent<MeshRenderer> ().material = eGray;
+
+            led1Hub.GetComponent<Image>().color = Color.red;
+            led2Hub.GetComponent<Image>().color = Color.yellow;
+            led3Hub.GetComponent<Image>().color = Color.green;
+            led4Hub.GetComponent<Image>().color = Color.gray;
         }
         if (health > 25 && health <= 50)
         {
@@ -95,6 +169,11 @@ public class Player : MonoBehaviour
             led2.GetComponent<MeshRenderer> ().material = eYellow;
             led3.GetComponent<MeshRenderer> ().material = eGray;
             led4.GetComponent<MeshRenderer> ().material = eGray;
+
+            led1Hub.GetComponent<Image>().color = Color.red;
+            led2Hub.GetComponent<Image>().color = Color.yellow;
+            led3Hub.GetComponent<Image>().color = Color.gray;
+            led4Hub.GetComponent<Image>().color = Color.gray;
         }
         if (health > 0 && health <= 25)
         {
@@ -102,6 +181,11 @@ public class Player : MonoBehaviour
             led2.GetComponent<MeshRenderer> ().material = eGray;
             led3.GetComponent<MeshRenderer> ().material = eGray;
             led4.GetComponent<MeshRenderer> ().material = eGray;
+
+            led1Hub.GetComponent<Image>().color = Color.red;
+            led2Hub.GetComponent<Image>().color = Color.gray;
+            led3Hub.GetComponent<Image>().color = Color.gray;
+            led4Hub.GetComponent<Image>().color = Color.gray;
         }
         if (health <= 0)
         {
@@ -109,6 +193,13 @@ public class Player : MonoBehaviour
             led2.GetComponent<MeshRenderer> ().material = eGray;
             led3.GetComponent<MeshRenderer> ().material = eGray;
             led4.GetComponent<MeshRenderer> ().material = eGray;
+
+            led1Hub.GetComponent<Image>().color = Color.gray;
+            led2Hub.GetComponent<Image>().color = Color.gray;
+            led3Hub.GetComponent<Image>().color = Color.gray;
+            led4Hub.GetComponent<Image>().color = Color.gray;
+
+            ledOn.GetComponent<MeshRenderer> ().material = eGray;
         }
 
         // CAMBIO DE CAMARA
@@ -120,6 +211,8 @@ public class Player : MonoBehaviour
         // UPDATE LIGHT        
         healthLight.GetComponent<Light>().range = health;
         healthLight.GetComponent<Light>().intensity = health / 10;       
+
+        SoundMovement();
     }
 
     void FixedUpdate()
@@ -144,7 +237,8 @@ public class Player : MonoBehaviour
         if (countdown > 0 && health > 0)
         {
             float r = Input.GetAxis("Horizontal");
-            rb.AddTorque(new Vector3(0,torque * Time.fixedDeltaTime * r,0), ForceMode.Impulse);
+            transform.Rotate(new Vector3(0,torque * Time.fixedDeltaTime * r,0));
+            //rb.AddTorque(new Vector3(0,torque * Time.fixedDeltaTime * r,0), ForceMode.Impulse); //LAST
             //transform.localRotation = Quaternion.Euler(0,torque * Time.fixedDeltaTime * r,0);
             //transform.Rotate(new Vector3(0,torque * Time.fixedDeltaTime * r,0));
             float v = Input.GetAxis("Vertical");
@@ -152,6 +246,90 @@ public class Player : MonoBehaviour
             rb.AddForce(transform.forward * force * Time.fixedDeltaTime * v, ForceMode.Impulse);
         }
     }
+
+    void SoundMovement()
+    {
+        if (Input.GetButtonDown("Horizontal"))
+        {
+            if(!VEnable)
+            {
+                HEnable = true;
+                engine.Play();
+            }
+        }
+
+        if (Input.GetButtonDown("Vertical"))
+        {
+            if(!HEnable)
+            {
+                VEnable = true;
+                engine.Play();
+            }
+        }
+
+        if (Input.GetButtonUp("Horizontal"))
+        {
+            HEnable = false;
+
+            if (!VEnable)
+            {
+                engine.Pause();
+            }
+        }
+
+        if (Input.GetButtonUp("Vertical"))
+        {
+            VEnable = false;
+
+            if (!HEnable)
+            {
+                engine.Pause();
+            }
+        }
+    }
+
+    // :: SONIDO MOVIMIENTO ::
+
+    
+
+    // Profe Marcos
+    /*
+    public class Tank : MonoBehaviour
+{
+    public GameObject cannonTransform;
+    public float speed = 20f;
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        moveTank();
+    }
+
+    void moveTank()
+    {
+        float ver = Input.GetAxis("Vertical");
+        float hor = Input.GetAxis("Horizontal");
+        transform.Translate(new Vector3(0,0,ver) * speed);
+        transform.Rotate(new Vector3(0,hor,0) * speed);
+
+        if(Input.GetKey(KeyCode.Q))
+        {
+            cannonTransform.transform.Rotate(0,-5,0);
+        }
+
+        if(Input.GetKey(KeyCode.E))
+        {
+            cannonTransform.transform.Rotate(0,5,0);
+        }
+
+    }
+}
+*/
+
     // :: CARGA DE BATERIA / SEGUIMIENTO DE LINEA ::
     void OnTriggerStay(Collider col)
     {
@@ -173,7 +351,20 @@ public class Player : MonoBehaviour
         {
             path = true;
             Debug.Log ("EN RUTA");
-            led5.GetComponent<MeshRenderer> ().material = eWhite;
+            if (health > 0)
+            {
+                led5.GetComponent<MeshRenderer> ().material = eWhite;
+                led5Hub.GetComponent<Image>().color =  new Color32(48,251,221,100);
+            }
+        }
+    }
+
+    void OnTriggerEnter(Collider col)
+    {
+        if(col.CompareTag("Batery"))
+        {
+            col.gameObject.SetActive(false);
+            health +=50;
         }
     }
 
@@ -190,6 +381,7 @@ public class Player : MonoBehaviour
             path = false;
             Debug.Log ("FUERA DEL CAMINO");
             led5.GetComponent<MeshRenderer> ().material = eGray;
+            led5Hub.GetComponent<Image>().color = Color.gray;
         }
     }
     
@@ -220,6 +412,9 @@ public class Player : MonoBehaviour
         }
         else { 
             Debug.Log ("BATERIA AGOTADA - GAME OVER");
+            led5.GetComponent<MeshRenderer> ().material = eGray;
+            led5Hub.GetComponent<Image>().color = Color.gray;
+            beep.volume = 0;
         }
     }
 
@@ -230,11 +425,13 @@ public class Player : MonoBehaviour
         {
             camera1.SetActive(false);
             camera2.SetActive(true);
+            bateryHub.SetActive(true);
         }
         else
         {
             camera1.SetActive(true);
             camera2.SetActive(false);
+            bateryHub.SetActive(false);
         }
     }
 

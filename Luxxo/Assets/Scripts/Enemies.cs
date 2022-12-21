@@ -44,16 +44,29 @@ public class Enemies : MonoBehaviour
             speedToFollow = 0;
         }
     }
+<<<<<<< Updated upstream
+=======
+    
+    public virtual void Follow()
+    {
+        if (follow == 0)
+        {
+            FollowAtPlayer();
+        }
+    }
+>>>>>>> Stashed changes
     
     public void FollowAtPlayer()
     {
         Vector3 directionToPlayer = (player.transform.position - this.transform.position).normalized;
         rb.AddForce(directionToPlayer * speedFinal, ForceMode.Impulse);
+        Quaternion newRotation = Quaternion.LookRotation((player.transform.position - transform.position));
+        transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, speedToFollow * Time.deltaTime);
     }
 
     void OnCollisionEnter(Collision col)
     {
-        if(col.gameObject == player)
+        if (col.gameObject.CompareTag("Player"))// if(col.gameObject == player)
         {
         follow = false;
         }

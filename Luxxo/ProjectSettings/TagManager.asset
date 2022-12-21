@@ -9,6 +9,7 @@ TagManager:
   - Line
   - ChargingBase
   - Wall
+  - Batery
   layers:
   - Default
   - TransparentFX

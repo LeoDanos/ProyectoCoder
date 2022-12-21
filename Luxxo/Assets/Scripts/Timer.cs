@@ -18,7 +18,7 @@ public class Timer : MonoBehaviour
 
     void Update()
     {
-        timeLeft = playerScript.countdown;
+        timeLeft = playerScript.countdown - 0.01f;
 
         if(timerOn)
         {
