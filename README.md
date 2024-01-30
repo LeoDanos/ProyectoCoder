@@ -9,5 +9,7 @@ y a otros robots detectores la luz (por el momento representados con esferas de 
 Durante el camino puede encontrar bases de carga.
 Para la oscuridad cuenta en el frente con un sensor ultrasónico que emitirá un pitido si detecta objetos y un panel de leds trasero que indica el nivel de carga y la detección de línea.
 
+Test: https://leodanos.itch.io/luxoo
+
 Una pequeña demostración:
 https://www.youtube.com/watch?v=99zv-KX9dtQ
